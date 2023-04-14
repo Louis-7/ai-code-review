@@ -18,6 +18,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "openai": "^3.2.1",
     "probot": "^12.2.4",
     "ts-node": "^10.9.1"
   },
