@@ -5,7 +5,7 @@ import { CodeReview } from './core/code-review';
 export = (app: Probot) => {
   app.on("pull_request.opened", async (context: Context<'pull_request.opened'>) => {
     const pullRequest = new PullRequest(context as any);
-    await pullRequest.comment("Thanks for opening this pull request. Code reviewer is on the way.");
+    await pullRequest.comment("🤖 Thanks for your pull request! Our robot reviewers will be checking it soon. Please make sure it follows our contribution guidelines and has passed our automated tests. 🤖💻");
 
     const codeReview = new CodeReview();
     await codeReview.review(context);
