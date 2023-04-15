@@ -1,0 +1,5 @@
+name: "AI Code Review"
+description: "Let AI do code review for you!"
+runs:
+  using: "node16"
+  main: "action/index.js"
