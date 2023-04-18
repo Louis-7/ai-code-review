@@ -13,8 +13,8 @@ export = (app: Probot) => {
       default:
         break;
     }
-    const codeReview = new CodeReview();
-    await codeReview.review(context as any);
+    const foo = new CodeReview();
+    await foo.review(context as any);
   });
 
   // For more information on building apps:
