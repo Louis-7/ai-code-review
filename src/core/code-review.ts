@@ -1,7 +1,6 @@
 import { Context } from "probot";
 import { PullRequest } from "../pull-request/pull-request";
 import { OpenAI } from './openai-helper';
-
 export class CodeReview {
   openai: OpenAI;
 
@@ -9,14 +8,41 @@ export class CodeReview {
     this.openai = new OpenAI();
   }
 
-  async review(context: Context<'pull_request.opened'>) {
+  async review(context: Context<'pull_request.opened' | 'pull_request.synchronize'>) {
     const repo = context.repo();
     const contextPullRequest = context.payload.pull_request;
+    const action = context.payload.action;
+    const pullRequest = new PullRequest(context as any);
+
+    let welcomeMessage:string = '';
+    let baseRef:string = '';
+    let headRef:string = '';
+
+    switch (action) {
+      case "opened":
+        welcomeMessage = `🤖 Thanks for your pull request! Our robot reviewers will be checking it soon. Please make sure it follows our contribution guidelines and has passed our automated tests. 🤖💻`;
+        baseRef = contextPullRequest.base.ref;
+        headRef = contextPullRequest.head.ref;
+        break;
+      case "synchronize":
+        welcomeMessage = `🤖 New commit(s) detected! 🤖`;
+        baseRef = context.payload['before'] ;
+        headRef = context.payload['after'];
+        break;
+      default:
+        console.log('pull request type is not recognized.');
+        return;
+    }
+
+    await pullRequest.comment(welcomeMessage);
+
+    console.log('baseRef: ', baseRef);
+    console.log('headRef: ', headRef);
 
     const diff = await context.octokit.repos.compareCommitsWithBasehead({
       owner: repo.owner,
       repo: repo.repo,
-      basehead: `${contextPullRequest.base.ref}...${contextPullRequest.head.ref}`,
+      basehead: `${baseRef}...${headRef}`,
     });
 
     const files = diff.data.files;

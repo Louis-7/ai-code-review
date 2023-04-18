@@ -1,14 +1,20 @@
 import { Context, Probot } from "probot";
-import { PullRequest } from "./pull-request/pull-request";
 import { CodeReview } from './core/code-review';
 
 export = (app: Probot) => {
-  app.on("pull_request.opened", async (context: Context<'pull_request.opened'>) => {
-    const pullRequest = new PullRequest(context as any);
-    await pullRequest.comment("🤖 Thanks for your pull request! Our robot reviewers will be checking it soon. Please make sure it follows our contribution guidelines and has passed our automated tests. 🤖💻");
-
+  app.on(['pull_request.opened', 'pull_request.synchronize'], async (context: Context<'pull_request.opened' | 'pull_request.synchronize'>) => {
+    switch (context.payload.action) {
+      case 'opened':
+        console.log('pull request opened!');
+        break;
+      case 'synchronize':
+        console.log('pull request synchronize!');
+        break;
+      default:
+        break;
+    }
     const codeReview = new CodeReview();
-    await codeReview.review(context);
+    await codeReview.review(context as any);
   });
 
   // For more information on building apps:
