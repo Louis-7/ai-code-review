@@ -9,14 +9,20 @@ export class CodeReview {
   }
 
   async review(context: Context<'pull_request.opened' | 'pull_request.synchronize'>) {
+    const pullRequest = new PullRequest(context as any);
+
+    if (!await this.openai.test()) {
+      await pullRequest.comment('Failed to initialize OPENAI. Please check whether OPENAI_API_KEY is set in your environment variables.');
+      return;
+    }
+
     const repo = context.repo();
     const contextPullRequest = context.payload.pull_request;
     const action = context.payload.action;
-    const pullRequest = new PullRequest(context as any);
 
-    let welcomeMessage:string = '';
-    let baseRef:string = '';
-    let headRef:string = '';
+    let welcomeMessage: string = '';
+    let baseRef: string = '';
+    let headRef: string = '';
 
     switch (action) {
       case "opened":
@@ -26,7 +32,7 @@ export class CodeReview {
         break;
       case "synchronize":
         welcomeMessage = `🤖 New commit(s) detected! 🤖`;
-        baseRef = context.payload['before'] ;
+        baseRef = context.payload['before'];
         headRef = context.payload['after'];
         break;
       default:

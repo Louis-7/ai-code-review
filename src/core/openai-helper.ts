@@ -13,6 +13,15 @@ export class OpenAI {
     this.openai = new OpenAIApi(this.configuration);
   }
 
+  async test(): Promise<boolean> {
+    try {
+      let res = await this.openai.listModels();
+      return !!res;
+    } catch (err) {
+      return false;
+    }
+  }
+
   async chat(messages: string[]) {
     let requestMessages: ChatCompletionRequestMessage[] = messages.map(message => ({
       role: 'user',

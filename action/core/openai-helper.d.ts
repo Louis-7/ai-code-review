@@ -4,5 +4,6 @@ export declare class OpenAI {
     configuration: Configuration;
     openai: OpenAIApi;
     constructor();
+    test(): Promise<boolean>;
     chat(messages: string[]): Promise<string>;
 }
