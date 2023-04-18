@@ -5,7 +5,7 @@ export = (app: Probot) => {
   app.on(['pull_request.opened', 'pull_request.synchronize'], async (context: Context<'pull_request.opened' | 'pull_request.synchronize'>) => {
     switch (context.payload.action) {
       case 'opened':
-        console.log('pull request opened!');
+        console.log('pull request is not opened!');
         break;
       case 'synchronize':
         console.log('pull request is not synchronize!');
