@@ -1,7 +1,10 @@
 import { Context } from "probot";
 import { PullRequest } from "../pull-request/pull-request";
 import { OpenAI } from './openai-helper';
+import { minimatch } from 'minimatch';
+
 export class CodeReview {
+  PATH_TO_EXCLUDE: string = process.env.PATH_TO_EXCLUDE || '';
   openai: OpenAI;
 
   constructor() {
@@ -59,6 +62,11 @@ export class CodeReview {
 
     for (let file of files) {
       let patch = file.patch;
+      let filename = file.filename;
+
+      if (this.isExcluded(filename)) {
+        continue;
+      }
 
       if (patch == null) {
         continue;
@@ -87,5 +95,17 @@ export class CodeReview {
       `
 
     return [openning, codePatch];
+  }
+
+  private isExcluded(filepath: string) {
+    const globs: string[] = this.PATH_TO_EXCLUDE.split(',').map(g => g.trim());
+
+    for (let glob of globs) {
+      if (minimatch(filepath, glob)) {
+        return true;
+      }
+    }
+
+    return false;
   }
 }
