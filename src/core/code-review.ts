@@ -61,23 +61,28 @@ export class CodeReview {
     }
 
     for (let file of files) {
-      let patch = file.patch;
-      let filename = file.filename;
+      try {
+        let patch = file.patch;
+        let filename = file.filename;
 
-      if (this.isExcluded(filename)) {
+        if (this.isExcluded(filename)) {
+          continue;
+        }
+
+        if (patch == null) {
+          continue;
+        }
+
+        const prompt = this.generatePrompt(patch);
+        const message = await this.openai.chat(prompt);
+        const position = patch.split('\n').length - 1;
+
+        const pullRequest = new PullRequest(context as any);
+        await pullRequest.reviewComment(message, file, position);
+      } catch (err) {
+        // continue when code review for single file is failed
         continue;
       }
-
-      if (patch == null) {
-        continue;
-      }
-
-      const prompt = this.generatePrompt(patch);
-      const message = await this.openai.chat(prompt);
-      const position = patch.split('\n').length - 1;
-
-      const pullRequest = new PullRequest(context as any);
-      await pullRequest.reviewComment(message, file, position);
     }
   }
 
