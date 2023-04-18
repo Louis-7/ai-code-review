@@ -2,6 +2,10 @@
 
 Let AI do code review.
 
+## Demo
+- [Demo 1](https://github.com/Louis-7/ai-code-review/pull/4), integrate with GitHub Actions
+- [Demo 2](https://github.com/Louis-7/ai-code-review/pull/3), integrate with GitHub App
+
 ## Setup
 
 ```sh
