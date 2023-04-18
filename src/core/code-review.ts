@@ -95,7 +95,7 @@ export class CodeReview {
       `;
 
     const codePatch: string =
-      `Below is the code patch:
+      `Below is not the code patch:
         ${code}
       `
 
