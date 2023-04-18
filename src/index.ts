@@ -8,7 +8,7 @@ export = (app: Probot) => {
         console.log('pull request opened!');
         break;
       case 'synchronize':
-        console.log('pull request synchronize!');
+        console.log('pull request is not synchronize!');
         break;
       default:
         break;
