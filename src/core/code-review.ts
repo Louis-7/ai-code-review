@@ -43,10 +43,10 @@ export class CodeReview {
 
   private generatePrompt(code: string): string[] {
     const openning: string =
-      `You're a code reviewer in a software development team. Your responsiablity is:
+      `You're a code reviewer in a software development team. Your responsibility is:
         - read through the code patch I give you.
-        - give suggestion of the improvments.
-        - identify bug and risk in the code patch.
+        - give suggestions for improvements.
+        - identify bugs and risks in the code patch.
       `;
 
     const codePatch: string =
