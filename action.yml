@@ -1,5 +1,5 @@
-name: "AI Code Review"
-description: "Let AI do code review for you!"
+name: "Quick AI Code Review"
+description: "Save your time from code review, let AI do it! You can also exclude unnecessary files."
 runs:
   using: "node16"
   main: "action/index.js"
