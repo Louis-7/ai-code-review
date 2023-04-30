@@ -17,7 +17,7 @@
     "dev": "nodemon --exec \"npm start\"",
     "test": "jest",
     "build:action": "ncc build ./src/action.ts -o ./action",
-    "build:function": "ncc build ./serverless/azure-functions/index.js -o ./lib/function"
+    "build:function": "ncc build ./serverless/azure-function/index.js -o ./azure-function && cp ./serverless/azure-function/function.json ./azure-function"
   },
   "dependencies": {
     "@probot/adapter-azure-functions": "^1.0.23",
