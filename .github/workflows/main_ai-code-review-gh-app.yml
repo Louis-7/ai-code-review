@@ -10,7 +10,8 @@ on:
   workflow_dispatch:
 
 env:
-  AZURE_FUNCTIONAPP_PACKAGE_PATH: '.' # set this to the path to your web app project, defaults to the repository root
+  APP_ROOT_PATH: '.'
+  AZURE_FUNCTIONAPP_PACKAGE_PATH: './lib/function' # set this to the path to your web app project, defaults to the repository root
   NODE_VERSION: '18.x' # set this to the node version to use (supports 8.x, 10.x, 12.x)
 
 jobs:
@@ -28,9 +29,9 @@ jobs:
       - name: 'Resolve Project Dependencies Using Npm'
         shell: bash
         run: |
-          pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
+          pushd './${{ env.APP_ROOT_PATH }}'
           npm install
-          npm run build --if-present
+          npm run build:function --if-present
           npm run test --if-present
           popd
 

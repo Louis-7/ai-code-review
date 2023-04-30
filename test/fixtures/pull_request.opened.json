@@ -4,6 +4,14 @@
     "number": 1,
     "user": {
       "login": "cr"
+    },
+    "base": {
+      "sha": "123abc",
+      "ref": "main"
+    },
+    "head": {
+      "sha": "abc123",
+      "ref": "development"
     }
   },
   "repository": {
