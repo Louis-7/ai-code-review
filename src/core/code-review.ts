@@ -204,23 +204,30 @@ export class CodeReview {
   }
 
   private async addCodeReviewToPullRequest(promise: Promise<CodeReviewResponse>[], pullRequest: PullRequest): Promise<boolean> {
-    await Promise.all(promise)
-      .then(async (responses: CodeReviewResponse[]) => {
-        for (let response of responses) {
-          if (response.type == CodeReviewType.CodeReview) {
-            const { message, file, position } = response;
+    let allSettled:boolean = true;
 
-            await pullRequest.reviewComment(message, file, position);
-          } else if (response.type == CodeReviewType.Message) {
-            await pullRequest.comment(response.message);
+    await Promise.allSettled(promise)
+      .then(async (responses: any) => {
+        for (let response of responses) {
+          if (response['status'] == 'fulfilled') {
+            if (response.type == CodeReviewType.CodeReview) {
+              const { message, file, position } = response;
+
+              await pullRequest.reviewComment(message, file, position);
+            } else if (response.type == CodeReviewType.Message) {
+              await pullRequest.comment(response.message);
+            }
+          } else if (response['status'] == 'rejected') {
+            console.log(response['reason']);
+            allSettled = false;
           }
         }
       })
       .catch(err => {
         console.log(err);
-        return Promise.resolve(false);
+        allSettled = false;
       })
 
-    return Promise.resolve(true);
+    return allSettled;
   }
 }
