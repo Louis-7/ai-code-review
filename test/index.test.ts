@@ -6,8 +6,7 @@ import nock from "nock";
 import myProbotApp from "../src";
 import { Probot, ProbotOctokit } from "probot";
 // Requiring our fixtures
-// import payload from "./fixtures/issues.opened.json";
-const issueCreatedBody = { body: "Thanks for opening this issue! An admin will response to this request later." };
+import payload from "./fixtures/pull_request.opened.json";
 const fs = require("fs");
 const path = require("path");
 
@@ -34,29 +33,112 @@ describe("My Probot app", () => {
     probot.load(myProbotApp);
   });
 
-  // test("creates a comment when an issue is opened", async () => {
-  //   const mock = nock("https://api.github.com")
-  //     // Test that we correctly return a test token
-  //     .post("/app/installations/2/access_tokens")
-  //     .reply(200, {
-  //       token: "test",
-  //       permissions: {
-  //         issues: "write",
-  //       },
-  //     })
+  test("creates a comment when an pull request is opened", async () => {
 
-  //     // Test that a comment is posted
-  //     .post("/repos/hiimbex/testing-things/issues/1/comments", (body: any) => {
-  //       expect(body).toMatchObject(issueCreatedBody);
-  //       return true;
-  //     })
-  //     .reply(200);
+    const openAiMock = nock("https://api.openai.com/v1/")
+      .get("/models")
+      .reply(200, {
+        "data": [
+          {
+            "id": "model-id-0",
+            "object": "model",
+            "owned_by": "organization-owner",
+            "permission": []
+          },
+        ],
+        "object": "list"
+      })
 
-  //   // Receive a webhook event
-  //   await probot.receive({ name: "issues", payload });
+      // as for code review
+      .post("/chat/completions", (body: any) => {
+        console.log(body);
+        return true;
+      })
+      .reply(200, {
+        "id": "chatcmpl-123",
+        "object": "chat.completion",
+        "created": 1677652288,
+        "choices": [{
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "\n\nYour code is good!",
+          },
+          "finish_reason": "stop"
+        }],
+        "usage": {
+          "prompt_tokens": 9,
+          "completion_tokens": 12,
+          "total_tokens": 21
+        }
+      })
 
-  //   expect(mock.pendingMocks()).toStrictEqual([]);
-  // });
+    const ghMock = nock("https://api.github.com")
+      // Test that we correctly return a test token
+      .post("/app/installations/2/access_tokens")
+      .reply(200, {
+        token: "test",
+        permissions: {
+          issues: "write",
+        },
+      })
+
+      // Test that a comment is posted
+      .post("/repos/cr/testing-things/issues/1/comments", (body: any) => {
+        expect(body).toMatchObject({
+          body: `🤖 Thanks for your pull request! AI reviewers will be checking it soon. Please make sure it follows our contribution guidelines and has passed our automated tests. 🤖💻`
+        });
+        return true;
+      })
+      .reply(200)
+
+      // Compare 2 commits
+      .get("/repos/cr/testing-things/compare/main...development")
+      .reply(200, {
+        files: [
+          {
+            "sha": "bbcd538c8e72b8c175046e27cc8f907076331401",
+            "filename": "file1.txt",
+            "status": "added",
+            "additions": 103,
+            "deletions": 21,
+            "changes": 124,
+            "blob_url": "https://github.com/octocat/Hello-World/blob/6dcb09b5b57875f334f61aebed695e2e4193db5e/file1.txt",
+            "raw_url": "https://github.com/octocat/Hello-World/raw/6dcb09b5b57875f334f61aebed695e2e4193db5e/file1.txt",
+            "contents_url": "https://api.github.com/repos/octocat/Hello-World/contents/file1.txt?ref=6dcb09b5b57875f334f61aebed695e2e4193db5e",
+            "patch": "@@ -132,7 +132,7 @@ module Test @@ -1000,7 +1000,7 @@ module Test"
+          }
+        ]
+      })
+
+      // // Test that a comment is posted
+      // .post("/repos/cr/testing-things/issues/1/comments", (body: any) => {
+      //   expect(body).toMatchObject({
+      //     body: `🤖 No code change detected. 🤖`
+      //   });
+      //   return true;
+      // })
+      // .reply(200)
+
+      // Create review comment
+      .post("/repos/cr/testing-things/pulls/1/comments", (body: any) => {
+        expect(body).toMatchObject({
+          body: "\n\nYour code is good!",
+          commit_id: "abc123",
+          path: "file1.txt",
+          position: 0
+        });
+        return true;
+      })
+      .reply(200)
+
+    // Receive a webhook event
+    await probot.receive({ name: "pull_request.opened", payload });
+
+    expect(ghMock.pendingMocks()).toStrictEqual([]);
+    expect(openAiMock.pendingMocks()).toStrictEqual([]);
+
+  });
 
   afterEach(() => {
     nock.cleanAll();
