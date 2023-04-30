@@ -13,12 +13,14 @@
   ],
   "scripts": {
     "build": "tsc",
-    "start": "probot run ./lib/index.js",
+    "start": "probot run ./lib/app/index.js",
     "dev": "nodemon --exec \"npm start\"",
     "test": "jest",
-    "build-gh-action": "ncc build ./src/action.ts -o ./action"
+    "build:action": "ncc build ./src/action.ts -o ./action",
+    "build:function": "ncc build ./serverless/azure-functions/index.js -o ./lib/function"
   },
   "dependencies": {
+    "@probot/adapter-azure-functions": "^1.0.23",
     "@probot/adapter-github-actions": "^3.1.3",
     "minimatch": "^9.0.0",
     "openai": "^3.2.1",
