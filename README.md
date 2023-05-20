@@ -1,5 +1,7 @@
 # AI Code Review
 
+<img width="500" alt="AI Code Review Banner" src="https://github.com/Louis-7/ai-code-review/assets/12605300/e4a0bfb6-b1f4-4dd5-a2d7-7d68711531e9">
+
 Let AI do code review for you! [Demo](https://github.com/Louis-7/ranking-board/pull/10)
 
 This app is calling OpenAI chatGPT API to do code review for you. Plan to support more AI models in the future.
