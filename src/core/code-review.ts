@@ -87,6 +87,7 @@ export class CodeReview {
         - read through the code patch I give you.
         - give suggestions for improvements.
         - identify bugs and risks in the code patch.
+        - only response with code review comments, don't rely the code patch again.
 
       Give me your comments in ${this.LANGUAGE}
     `;
