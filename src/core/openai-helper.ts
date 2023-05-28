@@ -32,6 +32,8 @@ export class OpenAI {
       content: message,
     }));
 
+    console.log('test');
+
     return await this.openai.createChatCompletion({
       model: this.MODEL,
       temperature: this.TEMPERATURE,

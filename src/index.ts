@@ -6,6 +6,7 @@ export = (app: Probot) => {
     switch (context.payload.action) {
       case 'opened':
         console.log('pull request opened!');
+        console.log('test change');
         break;
       case 'synchronize':
         console.log('pull request synchronize!');
