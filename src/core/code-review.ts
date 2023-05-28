@@ -83,12 +83,7 @@ export class CodeReview {
     let prompt = [];
 
     const opening: string = `
-      You're a code reviewer in a software development team. Your responsibility is:
-        - read through the code patch I give you.
-        - give suggestions for improvements.
-        - identify bugs and risks in the code patch.
-
-      Give me your comments in ${this.LANGUAGE}
+      Help me do code review in ${this.LANGUAGE}. Give me suggestions for improvements. Identify bugs and risks in the code patch.
     `;
 
     prompt.push(opening);
