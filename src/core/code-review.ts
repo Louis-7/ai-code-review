@@ -20,6 +20,8 @@ export class CodeReview {
   PATH_TO_EXCLUDE: string = process.env.PATH_TO_EXCLUDE || '';
   MAX_FILE_PER_PR: number = Number(process.env.MAX_FILE_PER_PR) || 20;
   MAX_PATCH_PER_FILE: number = Number(process.env.MAX_PATCH_PER_FILE) || Number.MAX_VALUE;
+  LANGUAGE: string = process.env.LANGUAGE || 'English';
+
   openai: OpenAI;
 
   constructor() {
@@ -80,13 +82,13 @@ export class CodeReview {
 
     let prompt = [];
 
-    const opening: string =
-      `You're a code reviewer in a software development team. Your responsibility is:
+    const opening: string = `
+      You're a code reviewer in a software development team. You're speaking ${this.LANGUAGE}. Your responsibility is:
         - read through the code patch I give you.
         - give suggestions for improvements.
         - identify bugs and risks in the code patch.
         - do not introduce your self in the code review, just give me review comments.
-      `;
+    `;
 
     prompt.push(opening);
 
