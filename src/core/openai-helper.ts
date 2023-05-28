@@ -2,6 +2,10 @@ import { Configuration, OpenAIApi, ChatCompletionRequestMessage } from 'openai';
 
 export class OpenAI {
   OPENAI_API_KEY: string = process.env.OPENAI_API_KEY || '';
+  MODEL: string = process.env.CHAT_GPT_MODEL || 'gpt-3.5-turbo';
+  TEMPERATURE: number = Number(process.env.TEMPERATURE) || 1;
+  TOP_P: number = Number(process.env.TOP_P) || 1;
+  
   configuration: Configuration;
   openai: OpenAIApi;
 
@@ -29,7 +33,9 @@ export class OpenAI {
     }));
 
     return await this.openai.createChatCompletion({
-      model: 'gpt-3.5-turbo',
+      model: this.MODEL,
+      temperature: this.TEMPERATURE,
+      top_p: this.TOP_P,
       messages: requestMessages
     }).then(response => {
       let data = response.data;
