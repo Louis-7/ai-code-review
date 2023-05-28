@@ -98,6 +98,8 @@ export class CodeReview {
         ${code}
       `
 
+    console.log(`Prompt generated:\n${opening}\n${codePatch}`);
+
     return [opening, codePatch];
   }
 
