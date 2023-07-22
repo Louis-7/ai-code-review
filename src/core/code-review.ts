@@ -21,6 +21,7 @@ export class CodeReview {
   MAX_FILE_PER_PR: number = Number(process.env.MAX_FILE_PER_PR) || 20;
   MAX_PATCH_PER_FILE: number = Number(process.env.MAX_PATCH_PER_FILE) || Number.MAX_VALUE;
   LANGUAGE: string = process.env.LANGUAGE || 'English';
+  CUSTOMIZED_PROMPT:string = process.env.CUSTOMIZED_PROMPT || '';
 
   openai: OpenAI;
 
@@ -82,22 +83,28 @@ export class CodeReview {
 
     let prompt = [];
 
-    const opening: string = `
-      You're a code reviewer in a software development team. Your responsibility is:
-        - read through the code patch I give you.
-        - give suggestions for improvements.
-        - identify bugs and risks in the code patch.
-        - only response with code review comments, don't rely the code patch again.
+    let opening: string = '';
 
-      Give me your comments in ${this.LANGUAGE}
-    `;
+    if (this.CUSTOMIZED_PROMPT === '') {
+      opening = `
+        You're a code reviewer in a software development team. Your responsibility is:
+          - read through the code patch I give you.
+          - give suggestions for improvements.
+          - identify bugs and risks in the code patch.
+          - only response with code review comments, don't rely the code patch again.
+
+        Give me your comments in ${this.LANGUAGE}.
+
+        Below is the code patch:
+
+      `
+    } else {
+      opening = this.CUSTOMIZED_PROMPT;
+    }
 
     prompt.push(opening);
 
-    const codePatch: string =
-      `Below is the code patch:
-        ${code}
-      `
+    const codePatch: string = `${code}`
 
     console.log(`Prompt generated:\n${opening}\n${codePatch}`);
 
