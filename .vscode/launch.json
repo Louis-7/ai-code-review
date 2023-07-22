@@ -5,6 +5,13 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "command": "npm run test",
+      "name": "Run npm test",
+      "request": "launch",
+      "type": "node-terminal",
+      "envFile": "${workspaceFolder}/.env"
+    },
+    {
       "type": "node",
       "request": "launch",
       "name": "Launch Program",
