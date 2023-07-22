@@ -6,15 +6,15 @@
 
 Let AI do code review for you! [Demo](https://github.com/Louis-7/ranking-board/pull/10)
 
-This app is calling OpenAI chatGPT API to do code review for you. Plan to support more AI models in the future.
+This app is calling OpenAI chatGPT API to do code review for you.
 
-[GitHub App](https://github.com/apps/ai-code-review) | [GitHub Action](https://github.com/marketplace/actions/quick-ai-code-review) | [Self-host Instruction](https://github.com/Louis-7/ai-code-review/tree/development#host-it-by-yourself) 
+[GitHub App](https://github.com/apps/ai-code-review) | [GitHub Action](https://github.com/marketplace/actions/quick-ai-code-review) | [Self-host Instruction](https://github.com/Louis-7/ai-code-review/tree/main#host-it-by-yourself) 
 
 ## Install
 
 ### GitHub App
 
-1. Using GitHub doesn't need you to provide a OpenAI API key, however I can not guarantee it works for 7 * 24 hours.
+1. Install GitHub App for you repository - [GitHub App - AI Code Review](https://github.com/apps/ai-code-review)
 2. Create a pull request in your repository
 
 ### GitHub Action
@@ -46,13 +46,13 @@ This app is calling OpenAI chatGPT API to do code review for you. Plan to suppor
              MAX_FILE_PER_PR: 20
    ```
 
-4. `GITHUB_TOKEN` and `OPENAI_API_KEY` are required parameter. Others are optional.
+4. `GITHUB_TOKEN` and `OPENAI_API_KEY` are required parameter. Others are optional. You can get all available options in the [.env.action.example](https://github.com/Louis-7/ai-code-review/blob/main/.env.action.example)
 
 5. Create a pull request in your repository
 
 ### Host it by yourself
 
-You can also host the code reviewer by your self. Just follow the Dev section
+You can also host the code reviewer by your self. Just follow the Dev section.
 
 ## Dev
 
