@@ -2,6 +2,7 @@ import { Context } from "probot";
 import { OpenAI } from './openai-helper';
 export declare class CodeReview {
     PATH_TO_EXCLUDE: string;
+    REPLY_TO_IGNORE: string | null;
     MAX_FILE_PER_PR: number;
     MAX_PATCH_PER_FILE: number;
     LANGUAGE: string;

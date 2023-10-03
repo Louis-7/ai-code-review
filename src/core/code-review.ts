@@ -18,6 +18,7 @@ type CodeReviewResponse = {
 
 export class CodeReview {
   PATH_TO_EXCLUDE: string = process.env.PATH_TO_EXCLUDE || '';
+  REPLY_TO_IGNORE: string | null = process.env.REPLY_TO_IGNORE || null;
   MAX_FILE_PER_PR: number = Number(process.env.MAX_FILE_PER_PR) || 20;
   MAX_PATCH_PER_FILE: number = Number(process.env.MAX_PATCH_PER_FILE) || Number.MAX_VALUE;
   LANGUAGE: string = process.env.LANGUAGE || 'English';
@@ -227,13 +228,17 @@ export class CodeReview {
             if (value.type == CodeReviewType.CodeReview) {
               const { message, file, position } = value;
 
-              await pullRequest.reviewComment(message, file, position);
+              if (message === this.REPLY_TO_IGNORE) {
+                return Promise.resolve('This reply is ignored');
+              }
+
+              return await pullRequest.reviewComment(message, file, position);
             } else if (value.type == CodeReviewType.Message) {
-              await pullRequest.comment(value.message);
+              return await pullRequest.comment(value.message);
             }
           } else if (response['status'] == 'rejected') {
-            console.log(response['reason']);
             allSettled = false;
+            return Promise.reject(response['reason']);
           }
         }
       })
