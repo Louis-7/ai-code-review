@@ -9,7 +9,7 @@ export declare class CodeReview {
     CUSTOMIZED_PROMPT: string;
     openai: OpenAI;
     constructor();
-    review(context: Context<'pull_request.opened' | 'pull_request.synchronize'>): Promise<void>;
+    review(context: Context<'pull_request.opened' | 'pull_request.synchronize' | 'pull_request.labeled'>): Promise<void>;
     private generatePrompt;
     private isExcluded;
     private preProcessPullRequestContext;

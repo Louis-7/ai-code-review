@@ -30,7 +30,7 @@ export class CodeReview {
     this.openai = new OpenAI();
   }
 
-  async review(context: Context<'pull_request.opened' | 'pull_request.synchronize'>) {
+  async review(context: Context<'pull_request.opened' | 'pull_request.synchronize' | 'pull_request.labeled'>) {
     const pullRequest = new PullRequest(context as any);
 
     if (!await this.openai.test()) {
@@ -124,7 +124,7 @@ export class CodeReview {
     return false;
   }
 
-  private preProcessPullRequestContext(context: Context<'pull_request.opened' | 'pull_request.synchronize'>): { welcomeMessage: string | undefined, baseRef: string, headRef: string } {
+  private preProcessPullRequestContext(context: Context<'pull_request.opened' | 'pull_request.synchronize' | 'pull_request.labeled'>): { welcomeMessage: string | undefined, baseRef: string, headRef: string } {
     const action = context.payload.action;
     const contextPullRequest = context.payload.pull_request;
 
@@ -143,6 +143,11 @@ export class CodeReview {
         baseRef = context.payload['before'];
         headRef = context.payload['after'];
         break;
+      case "labeled":
+        welcomeMessage = `🤖 Label detected! 🤖`;
+        baseRef = contextPullRequest.base.ref;
+        headRef = contextPullRequest.head.ref;
+        break;
       default:
         welcomeMessage = undefined;
         baseRef = ''
@@ -153,7 +158,7 @@ export class CodeReview {
 
   }
 
-  private async getDiffFiles(baseRef: string, headRef: string, context: Context<'pull_request.opened' | 'pull_request.synchronize'>): Promise<components["schemas"]["diff-entry"][] | undefined> {
+  private async getDiffFiles(baseRef: string, headRef: string, context: Context<'pull_request.opened' | 'pull_request.synchronize' | 'pull_request.labeled'>): Promise<components["schemas"]["diff-entry"][] | undefined> {
     const repo = context.repo();
     const diff = await context.octokit.repos.compareCommitsWithBasehead({
       owner: repo.owner,
