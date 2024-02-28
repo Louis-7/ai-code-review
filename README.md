@@ -37,7 +37,7 @@ This app is calling OpenAI chatGPT API to do code review for you.
      code-review:
        runs-on: ubuntu-latest
        steps:
-         - uses: Louis-7/ai-code-review@v0.1
+         - uses: Louis-7/ai-code-review@v0.4
            env:
              GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
              OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
