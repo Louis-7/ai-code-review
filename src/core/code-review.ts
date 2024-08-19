@@ -1,6 +1,6 @@
 import { Context } from "probot";
 import { PullRequest } from "../pull-request/pull-request";
-import { OpenAI } from './openai-helper';
+import { OpenAIHelper } from './openai-helper';
 import { minimatch } from 'minimatch';
 import { components } from '@octokit/openapi-types/'
 
@@ -24,16 +24,16 @@ export class CodeReview {
   LANGUAGE: string = process.env.LANGUAGE || 'English';
   CUSTOMIZED_PROMPT:string = process.env.CUSTOMIZED_PROMPT || '';
 
-  openai: OpenAI;
+  openAIHelper: OpenAIHelper;
 
   constructor() {
-    this.openai = new OpenAI();
+    this.openAIHelper = new OpenAIHelper();
   }
 
   async review(context: Context<'pull_request.opened' | 'pull_request.synchronize' | 'pull_request.labeled'>) {
     const pullRequest = new PullRequest(context as any);
 
-    if (!await this.openai.test()) {
+    if (!await this.openAIHelper.test()) {
       await pullRequest.comment('🤖 Failed to initialize OPENAI. Please check whether `OPENAI_API_KEY` is set in your repository variables.');
       return;
     }
@@ -203,7 +203,7 @@ export class CodeReview {
         const prompt = this.generatePrompt(patch);
 
         promise.push(
-          this.openai.chat(prompt)
+          this.openAIHelper.chatCompletion(prompt)
             .then((message: string) => ({
               type: CodeReviewType.CodeReview,
               message,

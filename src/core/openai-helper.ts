@@ -1,53 +1,54 @@
-import { Configuration, OpenAIApi, ChatCompletionRequestMessage } from 'openai';
+import { OpenAI } from "openai";
 
-export class OpenAI {
-  OPENAI_API_KEY: string = process.env.OPENAI_API_KEY || '';
-  MODEL: string = process.env.CHAT_GPT_MODEL || 'gpt-3.5-turbo';
+export class OpenAIHelper {
+  OPENAI_API_KEY: string = process.env.OPENAI_API_KEY || "";
+  MODEL: string = process.env.CHAT_GPT_MODEL || "gpt-3.5-turbo";
   TEMPERATURE: number = Number(process.env.TEMPERATURE) || 1;
   TOP_P: number = Number(process.env.TOP_P) || 1;
-  
-  configuration: Configuration;
-  openai: OpenAIApi;
+
+  client: OpenAI;
 
   constructor() {
-    this.configuration = new Configuration({
-      apiKey: this.OPENAI_API_KEY
+    this.client = new OpenAI({
+      apiKey: process.env["OPENAI_API_KEY"], // This is the default and can be omitted
     });
-
-    this.openai = new OpenAIApi(this.configuration);
   }
 
   async test(): Promise<boolean> {
     try {
-      let res = await this.openai.listModels();
+      let res = this.client.chat.completions.create({
+        model: this.MODEL,
+        messages: [{ role: "user", content: "Say this is a test!" }],
+      });
       return !!res;
     } catch (err) {
       return false;
     }
   }
 
-  async chat(messages: string[]) {
-    let requestMessages: ChatCompletionRequestMessage[] = messages.map(message => ({
-      role: 'user',
-      content: message,
-    }));
-
-    return await this.openai.createChatCompletion({
+  async chatCompletion(messages: string[]) {
+    const params: OpenAI.Chat.ChatCompletionCreateParams = {
       model: this.MODEL,
       temperature: this.TEMPERATURE,
       top_p: this.TOP_P,
-      messages: requestMessages
-    }).then(response => {
-      let data = response.data;
-      let choices = data.choices;
+      messages: messages.map((message) => ({
+        role: "user",
+        content: message,
+      })),
+    };
 
-      if (choices.length <= 0) {
-        return '';
-      }
+    return await this.client.chat.completions
+      .create(params)
+      .then((response) => {
+        const choices = response.choices;
 
-      let representativeChoice = choices[0];
+        if (choices.length <= 0) {
+          return "";
+        }
 
-      return representativeChoice.message?.content || '';
-    })
+        const representativeChoice = choices[0];
+
+        return representativeChoice.message?.content || "";
+      });
   }
 }
