@@ -1,5 +1,5 @@
 import { Context, Probot } from "probot";
-import { CodeReview } from './core/code-review';
+import { CodeReview } from './services/core/code-review';
 
 export = (app: Probot) => {
   app.on(['pull_request.opened', 'pull_request.synchronize', 'pull_request.labeled'], async (context: Context<'pull_request.opened' | 'pull_request.synchronize' | 'pull_request.labeled'>) => {
