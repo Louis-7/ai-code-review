@@ -2,6 +2,7 @@
 // import index from '../src/index'
 
 import nock from "nock";
+import dotenv from "dotenv"
 // Requiring our app implementation
 import myProbotApp from "../src";
 import { Probot, ProbotOctokit } from "probot";
@@ -14,6 +15,8 @@ const privateKey = fs.readFileSync(
   path.join(__dirname, "fixtures/mock-cert.pem"),
   "utf-8"
 );
+
+dotenv.config()
 
 describe("My Probot app", () => {
   let probot: any;
@@ -38,24 +41,12 @@ describe("My Probot app", () => {
   test("creates a comment when an pull request is opened", async () => {
 
     const openAiMock = nock("https://api.openai.com/v1/")
-      .get("/models")
-      .reply(200, {
-        "data": [
-          {
-            "id": "model-id-0",
-            "object": "model",
-            "owned_by": "organization-owner",
-            "permission": []
-          },
-        ],
-        "object": "list"
-      })
-
       // as for code review
       .post("/chat/completions", (body: any) => {
         console.log(body);
         return true;
       })
+      .times(2)
       .reply(200, {
         "id": "chatcmpl-123",
         "object": "chat.completion",
@@ -144,24 +135,12 @@ describe("My Probot app", () => {
 
   test("ignore reply",async () => {
     const openAiMock = nock("https://api.openai.com/v1/")
-      .get("/models")
-      .reply(200, {
-        "data": [
-          {
-            "id": "model-id-0",
-            "object": "model",
-            "owned_by": "organization-owner",
-            "permission": []
-          },
-        ],
-        "object": "list"
-      })
-
       // as for code review
       .post("/chat/completions", (body: any) => {
         console.log(body);
         return true;
       })
+      .times(2)
       .reply(200, {
         "id": "chatcmpl-123",
         "object": "chat.completion",
