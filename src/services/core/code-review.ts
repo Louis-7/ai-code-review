@@ -3,8 +3,8 @@ import { minimatch } from 'minimatch';
 import { components } from '@octokit/openapi-types/'
 
 import { PullRequest } from "../pull-request/pull-request";
-import { OpenAIEngine } from './openai-engine';
 import { GPTEngine } from "../../models/gpt-engine";
+import { CodeReviewFactory } from "./code-review-factory";
 
 enum CodeReviewType {
   CodeReview,
@@ -30,7 +30,7 @@ export class CodeReview {
   reviewEngine: GPTEngine;
 
   constructor() {
-    this.reviewEngine = new OpenAIEngine();
+    this.reviewEngine = CodeReviewFactory.createEngine(this.ENGINE);
   }
 
   async review(context: Context<'pull_request.opened' | 'pull_request.synchronize' | 'pull_request.labeled'>) {
