@@ -1,8 +1,10 @@
 import { Context } from "probot";
-import { PullRequest } from "../pull-request/pull-request";
-import { OpenAIHelper } from './openai-helper';
 import { minimatch } from 'minimatch';
 import { components } from '@octokit/openapi-types/'
+
+import { PullRequest } from "../pull-request/pull-request";
+import { OpenAIEngine } from './openai-engine';
+import { GPTEngine } from "../../models/gpt-engine";
 
 enum CodeReviewType {
   CodeReview,
@@ -17,6 +19,7 @@ type CodeReviewResponse = {
 }
 
 export class CodeReview {
+  ENGINE: string = process.env.ENGINE || '';
   PATH_TO_EXCLUDE: string = process.env.PATH_TO_EXCLUDE || '';
   REPLY_TO_IGNORE: string | null = process.env.REPLY_TO_IGNORE || null;
   MAX_FILE_PER_PR: number = Number(process.env.MAX_FILE_PER_PR) || 20;
@@ -24,16 +27,16 @@ export class CodeReview {
   LANGUAGE: string = process.env.LANGUAGE || 'English';
   CUSTOMIZED_PROMPT:string = process.env.CUSTOMIZED_PROMPT || '';
 
-  openAIHelper: OpenAIHelper;
+  reviewEngine: GPTEngine;
 
   constructor() {
-    this.openAIHelper = new OpenAIHelper();
+    this.reviewEngine = new OpenAIEngine();
   }
 
   async review(context: Context<'pull_request.opened' | 'pull_request.synchronize' | 'pull_request.labeled'>) {
     const pullRequest = new PullRequest(context as any);
 
-    if (!await this.openAIHelper.test()) {
+    if (!await this.reviewEngine.test()) {
       await pullRequest.comment('🤖 Failed to initialize OPENAI. Please check whether `OPENAI_API_KEY` is set in your repository variables.');
       return;
     }
@@ -203,7 +206,7 @@ export class CodeReview {
         const prompt = this.generatePrompt(patch);
 
         promise.push(
-          this.openAIHelper.chatCompletion(prompt)
+          this.reviewEngine.chatCompletion(prompt)
             .then((message: string) => ({
               type: CodeReviewType.CodeReview,
               message,

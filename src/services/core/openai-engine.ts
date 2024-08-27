@@ -1,6 +1,7 @@
 import { OpenAI } from "openai";
+import { GPTEngine } from "../../models/gpt-engine";
 
-export class OpenAIHelper {
+export class OpenAIEngine implements GPTEngine {
   OPENAI_API_KEY: string = process.env.OPENAI_API_KEY || "";
   MODEL: string = process.env.CHAT_GPT_MODEL || "gpt-3.5-turbo";
   TEMPERATURE: number = Number(process.env.TEMPERATURE) || 1;
