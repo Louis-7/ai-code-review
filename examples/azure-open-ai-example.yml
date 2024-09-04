@@ -1,0 +1,22 @@
+name: Code Review
+permissions:
+  contents: read
+  pull-requests: write
+on:
+  pull_request:
+    types: [opened, synchronize]
+jobs:
+  code-review:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: Louis-7/ai-code-review@v0.4
+        env:
+          ENGINE: 'azureopenai'
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          AZURE_OPENAI_BASE_URL: [base_url]
+          AZURE_OPENAI_API_KEY: ${{ secrets.AZURE_OPENAI_API_KEY }}
+          AZURE_API_VERSION: [api_version]
+          AZURE_DEPLOYMENT: [deployment_name]
+          PATH_TO_EXCLUDE: action/**/*, package-lock.json, package.json
+          MAX_PATCH_PER_FILE: 2000
+          MAX_FILE_PER_PR: 20

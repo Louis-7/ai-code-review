@@ -8,47 +8,23 @@ Let AI do code review for you! [Demo](https://github.com/Louis-7/ranking-board/p
 
 This app is calling OpenAI chatGPT API to do code review for you.
 
-[GitHub App](https://github.com/apps/ai-code-review) | [GitHub Action](https://github.com/marketplace/actions/quick-ai-code-review) | [Self-host Instruction](https://github.com/Louis-7/ai-code-review/tree/main#host-it-by-yourself) 
+[GitHub App](https://github.com/apps/ai-code-review) | [GitHub Action](https://github.com/marketplace/actions/quick-ai-code-review) | [Self-host Instruction](https://github.com/Louis-7/ai-code-review/tree/main#host-it-by-yourself)
 
 ## Install
-
-### GitHub App
-
-1. Install GitHub App for you repository - [GitHub App - AI Code Review](https://github.com/apps/ai-code-review)
-2. Create a pull request in your repository
-
-### GitHub Action
 
 1. Go to **Settings** -> **Secrets and variables** -> **Actions** -> **New repository secret**
 
 2. Create a repository secret named `OPENAI_API_KEY` and fill it with your API key
 
-3. Add following configurtion in your `.github/workflows/pr-code-review.yml`
+3. Add the configurations to `.github/workflows/pr-code-review.yml`
 
-   ```
-   name: Code Review
-   permissions:
-     contents: read
-     pull-requests: write
-   on:
-     pull_request:
-       types: [opened, synchronize]
-   jobs:
-     code-review:
-       runs-on: ubuntu-latest
-       steps:
-         - uses: Louis-7/ai-code-review@v0.4
-           env:
-             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-             OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-             PATH_TO_EXCLUDE: action/**/*, package-lock.json, package.json
-             MAX_PATCH_PER_FILE: 2000
-             MAX_FILE_PER_PR: 20
-   ```
+   1. [OpenAI example](https://github.com/Louis-7/ai-code-review/blob/main/examples/open-ai-example.yml)
 
-4. `GITHUB_TOKEN` and `OPENAI_API_KEY` are required parameter. Others are optional. You can get all available options in the [.env.action.example](https://github.com/Louis-7/ai-code-review/blob/main/.env.action.example)
+   2. [Azure OpenAI example](https://github.com/Louis-7/ai-code-review/blob/main/examples/azure-open-ai-example.yml)
 
-5. Create a pull request in your repository
+4. Get more details about the available environment variables in [.env.action.example](https://github.com/Louis-7/ai-code-review/blob/main/.env.action.example)
+
+5. Create a pull request in your repository and let AI assistant you!
 
 ### Host it by yourself
 

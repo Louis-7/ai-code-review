@@ -1,0 +1,19 @@
+name: Code Review
+permissions:
+  contents: read
+  pull-requests: write
+on:
+  pull_request:
+    types: [opened, synchronize]
+jobs:
+  code-review:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: Louis-7/ai-code-review@v0.4
+        env:
+          ENGINE: 'openai'
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          PATH_TO_EXCLUDE: action/**/*, package-lock.json, package.json
+          MAX_PATCH_PER_FILE: 2000
+          MAX_FILE_PER_PR: 20
