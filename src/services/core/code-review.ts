@@ -244,13 +244,13 @@ export class CodeReview {
           if (response['status'] == 'fulfilled') {
             const value = response['value'];
             if (value.type == CodeReviewType.CodeReview) {
-              const { message, file, position } = value;
+              const { message, file } = value;
 
               if (message === this.REPLY_TO_IGNORE) {
                 return Promise.resolve('This reply is ignored');
               }
 
-              return await pullRequest.reviewComment(message, file, position);
+              return await pullRequest.reviewComment(message, file);
             } else if (value.type == CodeReviewType.Message) {
               return await pullRequest.comment(value.message);
             }

@@ -25,7 +25,7 @@ export class PullRequest {
     });
   }
 
-  async reviewComment(comment: string, file: components["schemas"]["diff-entry"], position: number, context?: PullRequestContext) {
+  async reviewComment(comment: string, file: components["schemas"]["diff-entry"], context?: PullRequestContext) {
     if (context == null) {
       context = this.context;
     }
@@ -40,7 +40,7 @@ export class PullRequest {
       body: comment,
       commit_id: pullRequest.head.sha,
       path: file.filename,
-      position: position,
+      subject_type: 'file'
     });
   }
 }
