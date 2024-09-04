@@ -37,7 +37,17 @@ export class CodeReview {
     const pullRequest = new PullRequest(context as any);
 
     if (!await this.reviewEngine.test()) {
-      await pullRequest.comment('🤖 Failed to initialize OPENAI. Please check whether `OPENAI_API_KEY` is set in your repository variables.');
+      let environmentVariableName = '';
+
+      if (this.ENGINE == 'openai') {
+        environmentVariableName = 'OPENAI_API_KEY';
+      } else if (this.ENGINE == 'azureopenai') {
+        environmentVariableName = 'AZURE_OPENAI_API_KEY';
+      } else {
+        environmentVariableName = 'ENGINE';
+      }
+
+      await pullRequest.comment(`🤖 Failed to initialize code review engine. Please check whether ${environmentVariableName} is set in your repository variables.`);
       return;
     }
 

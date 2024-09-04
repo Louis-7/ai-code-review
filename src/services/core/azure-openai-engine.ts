@@ -27,9 +27,12 @@ export class AzureOpenAIEngine implements GPTEngine {
         model: this.model,
         messages: [{ role: "user", content: "This is a test message." }],
       });
-
+      console.log(res);
+      console.log('Engine test passed.');
       return !!res;
     } catch (err) {
+      console.log(err);
+      console.log('Engine test failed.');
       return false;
     }
   }

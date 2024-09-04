@@ -21,8 +21,12 @@ export class OpenAIEngine implements GPTEngine {
         model: this.MODEL,
         messages: [{ role: "user", content: "Say this is a test!" }],
       });
+      console.log(res);
+      console.log('Engine test passed.');
       return !!res;
     } catch (err) {
+      console.log(err);
+      console.log('Engine test failed.');
       return false;
     }
   }
