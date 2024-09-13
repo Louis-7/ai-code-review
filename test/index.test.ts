@@ -119,7 +119,7 @@ describe("My Probot app", () => {
           body: "\n\nYour code is good!",
           commit_id: "abc123",
           path: "file1.txt",
-          position: 0
+          subject_type: 'file'
         });
         return true;
       })
