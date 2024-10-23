@@ -19,6 +19,15 @@
         "<node_internals>/**"
       ],
       "program": "${workspaceFolder}/lib/app/index.js"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Test azure openai",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "program": "${workspaceFolder}/test.mjs"
     }
   ]
 }
