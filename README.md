@@ -6,13 +6,13 @@ Let AI do code review for you! [Demo](https://github.com/Louis-7/ranking-board/p
 
 This app is calling OpenAI chatGPT API to do code review for you.
 
-[GitHub App](https://github.com/apps/ai-code-review) | [GitHub Action](https://github.com/marketplace/actions/quick-ai-code-review) | [Self-host Instruction](https://github.com/Louis-7/ai-code-review/tree/main#host-it-by-yourself)
+[GitHub Action](https://github.com/marketplace/actions/quick-ai-code-review) | [Self-host Instruction](https://github.com/Louis-7/ai-code-review/tree/main#host-it-by-yourself)
 
 ## Install
 
 1. Go to **Settings** -> **Secrets and variables** -> **Actions** -> **New repository secret**
 
-2. Create a repository secret named `OPENAI_API_KEY` and fill it with your API key
+2. Create a repository secret named `OPENAI_API_KEY` (or `AZURE_OPENAI_API_KEY` if you're using Azure) and fill it with your API key
 
 3. Add the configurations to `.github/workflows/pr-code-review.yml`
 
