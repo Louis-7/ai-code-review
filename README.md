@@ -83,4 +83,4 @@ docker run -e APP_ID=<app-id> -e PRIVATE_KEY=<pem-value> protagonist-bot
 
 ## License
 
-[GPL 3.0](LICENSE) © 2023 Louis Liu
+AI Code Review is released under the [Apache License 2.0](LICENSE).
