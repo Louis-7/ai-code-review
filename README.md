@@ -12,13 +12,19 @@ This app is calling OpenAI chatGPT API to do code review for you.
 
 1. Go to **Settings** -> **Secrets and variables** -> **Actions** -> **New repository secret**
 
-2. Create a repository secret named `OPENAI_API_KEY` (or `AZURE_OPENAI_API_KEY` if you're using Azure) and fill it with your API key
+2. Create a repository secret named `OPENAI_API_KEY` and fill it with your API key
+
+   1. `AZURE_OPENAI_API_KEY` for Azure OpenAI
+
+   2. `DEEPSEEK_API_KEY` for DeepSeek
 
 3. Add the configurations to `.github/workflows/pr-code-review.yml`
 
    1. [OpenAI example](https://github.com/Louis-7/ai-code-review/blob/main/examples/open-ai-example.yml)
 
    2. [Azure OpenAI example](https://github.com/Louis-7/ai-code-review/blob/main/examples/azure-open-ai-example.yml)
+
+   3. [DeepSeek example](https://github.com/Louis-7/ai-code-review/blob/main/examples/deepseek-example.yml)
 
 4. Get more details about the available environment variables in [.env.action.example](https://github.com/Louis-7/ai-code-review/blob/main/.env.action.example)
 
