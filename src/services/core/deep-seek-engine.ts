@@ -1,4 +1,4 @@
-import { OpenAI, AzureOpenAI } from "openai";
+import { OpenAI } from "openai";
 import { GPTEngine } from "../../models/gpt-engine";
 
 export class DeepSeekEngine implements GPTEngine {
@@ -8,10 +8,10 @@ export class DeepSeekEngine implements GPTEngine {
   temperature: number = Number(process.env.TEMPERATURE) || 0;
   top_p: number = Number(process.env.TOP_P) || 1;
 
-  client: AzureOpenAI;
+  client: OpenAI;
 
   constructor() {
-    this.client = new AzureOpenAI({
+    this.client = new OpenAI({
       baseURL: this.baseURL,
       apiKey: this.apiKey
     });
