@@ -1,4 +1,4 @@
-import { AzureOpenAI } from "openai";
+import { OpenAI } from "openai";
 import { GPTEngine } from "../../models/gpt-engine";
 export declare class DeepSeekEngine implements GPTEngine {
     baseURL: string;
@@ -6,7 +6,7 @@ export declare class DeepSeekEngine implements GPTEngine {
     model: string;
     temperature: number;
     top_p: number;
-    client: AzureOpenAI;
+    client: OpenAI;
     constructor();
     test(): Promise<boolean>;
     chatCompletion(messages: string[]): Promise<string>;
