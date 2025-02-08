@@ -43,6 +43,8 @@ export class CodeReview {
         environmentVariableName = 'OPENAI_API_KEY';
       } else if (this.ENGINE == 'azureopenai') {
         environmentVariableName = 'AZURE_OPENAI_API_KEY';
+      } else if (this.ENGINE = 'deepseek') {
+        environmentVariableName = 'DEEPSEEK_API_KEY'
       } else {
         environmentVariableName = 'ENGINE';
       }
